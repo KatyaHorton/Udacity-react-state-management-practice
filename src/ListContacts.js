@@ -1,83 +1,91 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
+// imports React to build react componenet
+// grabs the Component property out of React
+import React, { Component } from 'react'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
+// builds our component using the class syntax  
+// this component will map over each of contacts and display specific contact to the view    
 class ListContacts extends Component {
-  static propTypes = {
-    contacts: PropTypes.array.isRequired,
-    onDeleteContact: PropTypes.func.isRequired
-  }
 
-  state = {
-    query: ''
-  }
+state = {
+		query: ''
+	}
 
-  updateQuery = (query) => {
-    this.setState({ query: query.trim() })
-  }
+updateQuery = (query) => {
+	this.setState({ query: query.trim() })
+}
+	
 
-  clearQuery = () => {
-    this.setState({ query: '' })
-  }
+//method to reset our query
 
-  render() {
-    const { contacts, onDeleteContact } = this.props
-    const { query } = this.state
-
-    let showingContacts
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      showingContacts = contacts.filter((contact) => match.test(contact.name))
-    } else {
-      showingContacts = contacts
-    }
-
-    showingContacts.sort(sortBy('name'))
-
-    return (
-      <div className='list-contacts'>
-        <div className='list-contacts-top'>
-          <input
-            className='search-contacts'
-            type='text'
-            placeholder='Search contacts'
-            value={query}
-            onChange={(event) => this.updateQuery(event.target.value)}
-          />
-          <Link
-            to='/create'
-            className='add-contact'
-          >Add Contact</Link>
-        </div>
-
-        {showingContacts.length !== contacts.length && (
-          <div className='showing-contacts'>
-            <span>Now showing {showingContacts.length} of {contacts.length} total</span>
-            <button onClick={this.clearQuery}>Show all</button>
-          </div>
-        )}
-
-        <ol className='contact-list'>
-          {showingContacts.map((contact) => (
-            <li key={contact.id} className='contact-list-item'>
-              <div className='contact-avatar' style={{
-                backgroundImage: `url(${contact.avatarURL})`
-              }}/>
-              <div className='contact-details'>
-                <p>{contact.name}</p>
-                <p>{contact.email}</p>
-              </div>
-              <button onClick={() => onDeleteContact(contact)} className='contact-remove'>
-                Remove
-              </button>
-            </li>
-          ))}
-        </ol>
-      </div>
-    )
-  }
+clearQuery = () => {
+	this.setState({ query: '' })
 }
 
-export default ListContacts
+// specifies the render property (required in React)
+//sets how UI in this component will look like (ol in that case) 
+	render() {
+		
+//map over ouur contacts which match the specific patternto find matching REGULAR EXPRESSIONS 
+		let showingContacts  
+//if this.state.query is truthy (meabibg someone has typed smth into input field)
+		if (this.state.query) {
+// 
+			const match = new RegExp(escapeRegExp(this.state.query), 'i')
+		 	showingContacts = this.props.contacts.filter((contact) => match.test(contact.name))
+		} else {
+//if nothing typed in the input field 
+			showingContacts = this.props.contacts
+		}
+		
+		showingContacts.sort(sortBy('name'));
+//we access contacts array (value of the property(attribute) contacts which we assigned to the ListContacts component in the App.js file
+	
+		return (			
+			<div className='list-contacts'>
+			<div className='list-contacts-top'>
+				<input 
+					className='search-contacts'
+					type='text'
+					placeholder='Search contacts'
+	//we want the value of this input to allwats be as this.setate.query
+	//we want this.state.query to change whenever the input changes 
+					value={this.state.query}
+					onChange={(event) => this.updateQuery(event.target.value)}
+			/>
+			</div>
+			
+ {showingContacts.length !== this.props.contacts.length && (
+ 		<div className='showing-contacts'>
+	 <span>Now showing {showingContacts.length} of {this.props.contacts.length}</span>
+	 <button onClick={this.clearQuery}>Show all</button>
+	 </div>
+ )}
+
+		<ol className='contact-list'>
+			{showingContacts.map((contact) => 
+				<li key={contact.id} className='contact-list-item'>
+					
+					<div className='contact-avatar' 
+		   style={{ backgroundImage: `url(${contact.avatarURL})` }}/>
+			
+	<div className='contact-details'>
+				<p>{contact.name}</p>
+				<p>{contact.email}</p>
+			</div>
+			<button onClick={() => this.props.onDeleteContact(contact)} className='contact-remove'>
+				Remove 
+			</button>
+				</li>	
+		)}
+			</ol>
+			
+			</div>
+	
+		)
+	}
+} 
+
+
+export default ListContacts 
