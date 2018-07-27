@@ -1,6 +1,7 @@
 // imports React to build react componenet
 // grabs the Component property out of React
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
@@ -54,6 +55,14 @@ clearQuery = () => {
 					value={this.state.query}
 					onChange={(event) => this.updateQuery(event.target.value)}
 			/>
+//after importin Link we cange a tag to the Link componenet (it will still render ancor tag)
+			<Link
+//instead of an href it uses TO prop (href='#create'), it also updates the URL to /create
+			 to='/create'
+//when th button is clicked, this function invokes, now we are in the ListContacts component - it does now own the state of the screen (that state lives in our App) to be able to change that we need to pass a function to the ListContacts component in Render () on App.js
+// not needed anymore, as React router does that job for us  (onClick={this.props.onNavigate})
+			 className='add-contact'
+			 >Add Contact </Link>
 			</div>
 			
  {showingContacts.length !== this.props.contacts.length && (
