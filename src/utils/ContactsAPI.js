@@ -9,7 +9,7 @@ const headers = {
   'Accept': 'application/json',
   'Authorization': token
 }
-
+//makes a request to API and gets back the info (which we will put into the state )
 export const getAll = () =>
   fetch(`${api}/contacts`, { headers })
     .then(res => res.json())
